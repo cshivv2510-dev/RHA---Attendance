@@ -202,10 +202,10 @@ export function ScanPage() {
               onCameraReady={onCameraReady}
             />
 
-            {/* Single green viewfinder — four corner brackets at ~70% */}
+            {/* Single green viewfinder — four corner brackets at ~82% */}
             {isScannerActive && (
               <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                <div className="relative w-[70%] aspect-square">
+                <div className="relative w-[82%] aspect-square">
                   <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" fill="none">
                     <path d="M 22 4 L 4 4 L 4 22" stroke="#4cc07f" strokeWidth="3" strokeLinecap="round" />
                     <path d="M 78 4 L 96 4 L 96 22" stroke="#4cc07f" strokeWidth="3" strokeLinecap="round" />

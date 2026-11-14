@@ -36,7 +36,10 @@ export function QrScanner({ onScanSuccess, isActive, onCameraError, onCameraRead
       target,
       {
         fps: 10,
-        qrbox: { width: 230, height: 230 },
+        qrbox: (viewfinderWidth, viewfinderHeight) => {
+          const size = Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.72);
+          return { width: size, height: size };
+        },
         aspectRatio: 1.0,
       },
       (decodedText) => {

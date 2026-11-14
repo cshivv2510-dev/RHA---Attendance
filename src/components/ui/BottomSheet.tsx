@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { X } from 'lucide-react';
 
 interface BottomSheetProps {
@@ -12,6 +12,28 @@ interface BottomSheetProps {
  * Bottom sheet — slides up from the bottom on phones, centred card on wider screens.
  */
 export function BottomSheet({ open, onClose, title, children }: BottomSheetProps) {
+  const [keyboardOffset, setKeyboardOffset] = useState(0);
+
+  // Lift the sheet above the on-screen keyboard (mobile)
+  useEffect(() => {
+    if (!open) {
+      setKeyboardOffset(0);
+      return;
+    }
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const update = () => {
+      setKeyboardOffset(Math.max(0, window.innerHeight - vv.height - vv.offsetTop));
+    };
+    update();
+    vv.addEventListener('resize', update);
+    vv.addEventListener('scroll', update);
+    return () => {
+      vv.removeEventListener('resize', update);
+      vv.removeEventListener('scroll', update);
+    };
+  }, [open]);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -37,6 +59,10 @@ export function BottomSheet({ open, onClose, title, children }: BottomSheetProps
     >
       <div
         className="w-full sm:max-w-md bg-[var(--bg-card)] rounded-t-3xl sm:rounded-3xl max-h-[88dvh] flex flex-col animate-slide-up shadow-2xl"
+        style={{
+          marginBottom: keyboardOffset || undefined,
+          maxHeight: keyboardOffset ? `calc(88dvh - ${keyboardOffset}px)` : undefined,
+        }}
         onClick={e => e.stopPropagation()}
       >
         {/* Drag handle */}
